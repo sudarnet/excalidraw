@@ -18,7 +18,7 @@ services:
       - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
       - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
       - traefik.http.routers.draw-https.tls.certresolver=le
-      restart: on-failure
+    restart: on-failure
     environment:
       - NODE_ENV=production
     volumes:
