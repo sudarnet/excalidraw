@@ -2,33 +2,36 @@ version: "3.8"
 
 services:
   excalidraw:
-  image: asudarsanan/excalidraw:0.15.0-suda
-  deploy:
-    mode: replicated
-    replicas: 1
-    placement:
-        constraints: [node.labels.sudarnet.allow.draw == true]
-    labels:
-    # Traefik configuration, Hostname needs to be changed
-    - traefik.enable=true
-    - traefik.http.services.draw-https.loadbalancer.server.port=80
-    - traefik.http.routers.draw-https.rule=Host(`draw.sudarnet.in`)
-    - traefik.http.routers.draw-https.entrypoints=https
-    - traefik.http.routers.draw-https.tls=true
-    - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
-    - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
-    - traefik.http.routers.draw-https.tls.certresolver=le
-    restart: on-failure
-    stdin_open: true
-    healthcheck:
-      disable: true
-    environment:
-      - NODE_ENV=production
-    volumes:
-      - ./:/opt/node_app/app:delegated
-      - ./package.json:/opt/node_app/package.json
-      - ./yarn.lock:/opt/node_app/yarn.lock
-      - notused:/opt/node_app/app/node_modules
+    image: asudarsanan/excalidraw:0.15.0-suda
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+          constraints: [node.labels.sudarnet.allow.draw == true]
+      labels:
+      # Traefik configuration, Hostname needs to be changed
+      - traefik.enable=true
+      - traefik.http.services.draw-https.loadbalancer.server.port=80
+      - traefik.http.routers.draw-https.rule=Host(`draw.sudarnet.in`)
+      - traefik.http.routers.draw-https.entrypoints=https
+      - traefik.http.routers.draw-https.tls=true
+      - traefik.http.middlewares.https-redirect.redirectscheme.scheme=https
+      - traefik.http.middlewares.https-redirect.redirectscheme.permanent=true
+      - traefik.http.routers.draw-https.tls.certresolver=le
+      restart: on-failure
+      stdin_open: true
+      healthcheck:
+        disable: true
+      environment:
+        - NODE_ENV=production
+      volumes:
+        - ./:/opt/node_app/app:delegated
+        - ./package.json:/opt/node_app/package.json
+        - ./yarn.lock:/opt/node_app/yarn.lock
+        - /mnt/sudarnet/sudarnet-draw:/opt/node_app/app/node_modules
+    networks:
+      - traefik-public
 
-volumes:
-  notused:
+networks:
+  traefik-public:
+    external: true
