@@ -22,13 +22,13 @@ services:
       stdin_open: true
       healthcheck:
         disable: true
-      environment:
-        - NODE_ENV=production
-      volumes:
-        - ./:/opt/node_app/app:delegated
-        - ./package.json:/opt/node_app/package.json
-        - ./yarn.lock:/opt/node_app/yarn.lock
-        - /mnt/sudarnet/sudarnet-draw:/opt/node_app/app/node_modules
+    environment:
+      - NODE_ENV=production
+    volumes:
+      - ./:/opt/node_app/app:delegated
+      - ./package.json:/opt/node_app/package.json
+      - ./yarn.lock:/opt/node_app/yarn.lock
+      - /mnt/sudarnet/sudarnet-draw:/opt/node_app/app/node_modules
     networks:
       - traefik-public
 
